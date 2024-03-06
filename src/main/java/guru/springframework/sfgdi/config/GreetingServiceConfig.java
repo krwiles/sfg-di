@@ -1,5 +1,7 @@
 package guru.springframework.sfgdi.config;
 
+import com.springframework.pets.PetService;
+import com.springframework.pets.PetServiceFactory;
 import guru.springframework.sfgdi.repositories.EnglishgGreetingRepository;
 import guru.springframework.sfgdi.repositories.EnglishgGreetingRepositoryImpl;
 import guru.springframework.sfgdi.services.*;
@@ -12,6 +14,23 @@ import org.springframework.stereotype.Service;
 // configuration is useful for bringing in 3rd party components to spring
 @Configuration
 public class GreetingServiceConfig {
+
+    @Bean
+    PetServiceFactory petServiceFactory() {
+        return new PetServiceFactory();
+    }
+
+    @Profile({"dog", "default"})
+    @Bean
+    PetService dogPetService(PetServiceFactory petServiceFactory) {
+        return petServiceFactory.getPetService("dog");
+    }
+
+    @Profile("cat")
+    @Bean
+    PetService catPetService(PetServiceFactory petServiceFactory) {
+        return petServiceFactory.getPetService("cat");
+    }
 
     @Profile("ES, default")
     @Bean("i18nService")
